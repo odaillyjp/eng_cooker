@@ -1,3 +1,4 @@
+require 'eng_cooker/cofiguration'
 require 'eng_cooker/sentence'
 
 module EngCooker

@@ -14,7 +14,15 @@ module EngCooker
       end
 
       def sample
-        @sentences.sample
+        sentence = @sentences.sample
+        # 返り値のハッシュのキーはシンボルであることが規則なので、
+        # キーをシンボルに変換する
+        sentence.present? ? sentence.symbolize_keys : nil
+      end
+
+      def truncate!
+        @senteces = []
+        File.open(@storage_path, 'w') { |file| file.write(@sentences.to_json) }
       end
 
       private
@@ -31,7 +39,7 @@ module EngCooker
 
   Sentence.class_eval do
     def to_h
-      { 'en_text' => @en_text, 'ja_text' => @ja_text, 'created_at' => Time.now }
+      { en_text: @en_text, ja_text: @ja_text, created_at: Time.now }
     end
   end
 end
