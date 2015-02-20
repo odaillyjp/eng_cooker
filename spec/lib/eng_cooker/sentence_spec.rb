@@ -8,15 +8,47 @@ module EngCooker
         ja_text: '彼女は海岸で貝殻を売ります。')
     end
 
+    # class methods
+
     context '英文が1つ保存されているとき' do
-      before { sentence.save }
-      after { EngCooker.configuration.database.truncate! }
+      before :all do
+        @created_sentence = Sentence.create('I am bread.', '私はパンです。')
+      end
+
+      after :all do
+        EngCooker.configuration.database.truncate!
+      end
+
+      describe '.all' do
+        it 'その英文だけを持つ配列を返すこと' do
+          sampling_sentences = Sentence.all
+          expect(sampling_sentences).to eq [@created_sentence]
+        end
+      end
 
       describe '.sample' do
         it 'その英文を返すこと' do
           sampling_sentence = Sentence.sample
-          expect(sampling_sentence.en_text).to eq sentence.en_text
-          expect(sampling_sentence.ja_text).to eq sentence.ja_text
+          expect(sampling_sentence).to eq @created_sentence
+        end
+      end
+    end
+
+    context '英文が2つ保存されているとき' do
+      before :all do
+        @created_sentences = [
+          Sentence.create('I came to like him.', '彼を好きになりました。'),
+          Sentence.create('I feel like having a drink tonight.', '今晩、飲みたいよ。')]
+      end
+
+      after :all do
+        EngCooker.configuration.database.truncate!
+      end
+
+      describe '.all' do
+        it '保存された2つの英文だけを持つ配列を返すこと' do
+          sampling_sentences = Sentence.all
+          expect(sampling_sentences).to eq @created_sentences
         end
       end
     end

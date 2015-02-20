@@ -14,21 +14,26 @@ module EngCooker
       end
 
       def sample
-        sentence = @sentences.sample
-        # 返り値のハッシュのキーはシンボルであることが規則なので、
-        # キーをシンボルに変換する
-        sentence.present? ? sentence.symbolize_keys : nil
+        @sentences.sample
+      end
+
+      def find_all
+        @sentences
       end
 
       def truncate!
-        @senteces = []
+        @sentences = []
         File.open(@storage_path, 'w') { |file| file.write(@sentences.to_json) }
       end
 
       private
 
       def load_storage_file
-        File.exist?(@storage_path) ? JSON.parse(File.read(@storage_path)) : []
+        if File.exist?(@storage_path)
+          JSON.parse(File.read(@storage_path)).map(&:symbolize_keys)
+        else
+          []
+        end
       rescue JSON::ParserError
         raise StorageLoadError, 'データベースファイルの解析に失敗しました。'
       end
