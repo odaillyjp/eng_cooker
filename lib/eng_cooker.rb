@@ -1,5 +1,6 @@
 require 'eng_cooker/cofiguration'
 require 'eng_cooker/sentence'
+require 'eng_cooker/question'
 
 module EngCooker
   APP_ROOT = File.expand_path('../', __dir__)

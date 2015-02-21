@@ -53,14 +53,20 @@ module EngCooker
       end
     end
 
+    # public methods
+
+    describe '#filter_en_text' do
+      it '英文の中のアルファベットを"_"に変換した文字列を返すこと' do
+        expect(sentence.filter_en_text).to eq '___ _____ _________ __ ___ ________.'
+      end
+    end
+
     # private methods
 
     describe '#split_word' do
-      context '英文を渡したとき' do
-        it '英文の中で使われている単語を配列で返すこと' do
-          words = sentence.send(:split_word, sentence.en_text)
-          expect(words).to eq %w(She sells seashells by the seashore)
-        end
+      it '英文の中で使われている単語を配列で返すこと' do
+        words = sentence.send(:split_word, sentence.en_text)
+        expect(words).to eq %w(She sells seashells by the seashore)
       end
     end
   end

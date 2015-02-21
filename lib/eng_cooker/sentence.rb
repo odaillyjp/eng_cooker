@@ -29,6 +29,10 @@ module EngCooker
       EngCooker.configuration.database.set(self)
     end
 
+    def filter_en_text(filted_symbol = '_')
+      @en_text.gsub(/[^\s\r\n,.:;"()]/, filted_symbol)
+    end
+
     def ==(other)
       # 英文と日本語訳文が同じならば、同一だとみなす
       return false unless other.is_a?(Sentence)
