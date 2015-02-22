@@ -21,13 +21,25 @@ module EngCooker
           expect(maked_question.answer).to eq 'Lorem ipsum.'
         end
       end
+    end
+
+    context '英文が"Lorem ipsum dolor sit amet."、訳文が"ダミーのテキストです。"の問題のとき' do
+      let!(:sentence) do
+        Sentence.new(
+          en_text: 'Lorem ipsum dolor sit amet.',
+          ja_text: 'ダミーのテキストです。')
+      end
+
+      let(:question) { Question.new(sentence) }
 
       # public methods
 
       describe '#check_answer' do
-        context '答えが"Lorem ipsum."の問題に対して、"Loxxm ixsxx."を渡してとき' do
-          it '"Lo__m i_s__."という文字列を返すこと' do
-            expect(Question.make.check_answer('Loxxm ixsxx.')).to eq 'Lo__m i_s__.'
+        context '"Loxxm ixsxx xolor sit !?$#."を渡したとき' do
+          it '"Lo__m i_s__ _olor sit ____."という文字列を返すこと' do
+            user_answer = 'Loxxm ixsxx xolor sit !?$#.'
+            expect_answer = 'Lo__m i_s__ _olor sit ____.'
+            expect(question.check_answer(user_answer)).to eq expect_answer
           end
         end
       end
