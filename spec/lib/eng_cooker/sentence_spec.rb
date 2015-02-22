@@ -47,8 +47,13 @@ module EngCooker
 
       describe '.all' do
         it '保存された2つの英文だけを持つ配列を返すこと' do
-          sampling_sentences = Sentence.all
-          expect(sampling_sentences).to eq @created_sentences
+          expect(Sentence.all).to eq @created_sentences
+        end
+      end
+
+      describe '.sample' do
+        it '2つの英文の内、1つの英文を返すこと' do
+          expect(Sentence.sample).to be_in(@created_sentences)
         end
       end
     end

@@ -2,6 +2,8 @@ module EngCooker
   class Sentence
     attr_reader :en_text, :ja_text, :words
 
+    DELIMITER = '\s\r\n,.:;"()'
+
     def self.create(en_text, ja_text)
       sentence = Sentence.new(en_text: en_text, ja_text: ja_text)
       sentence.save
@@ -30,7 +32,7 @@ module EngCooker
     end
 
     def filter_en_text(filted_symbol = '_')
-      @en_text.gsub(/[^\s\r\n,.:;"()]/, filted_symbol)
+      @en_text.gsub(/[^#{DELIMITER}]/, filted_symbol)
     end
 
     def ==(other)
@@ -44,7 +46,7 @@ module EngCooker
     private
 
     def split_word(en_text)
-      en_text.split(/[\s\r\n,.:;"()]+/)
+      en_text.split(/[#{DELIMITER}]+/)
     end
   end
 end
