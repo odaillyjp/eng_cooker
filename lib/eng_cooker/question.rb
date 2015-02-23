@@ -1,6 +1,6 @@
 module EngCooker
   class Question
-    attr_reader :examination, :hint, :answer
+    attr_reader :examination, :hidden_answer, :answer
 
     def self.make
       Question.new(Sentence.sample)
@@ -8,23 +8,34 @@ module EngCooker
 
     def initialize(sentence)
       @examination = sentence.ja_text
-      @hint = sentence.filter_en_text
+      @hidden_answer = sentence.hide_en_text
       @answer = sentence.en_text
     end
 
-    def check_answer(user_answer)
-      # 問題の答えとユーザーの回答を比べて、一致していない文字を'_'に変換文字列を返す
-      #
-      # ex.
-      #   問題の答え (@answer)         = 'abcdef'
-      #   ユーザーの回答 (user_answer) = 'axcxxf'
-      #   返り値                       = 'a_c__f'
-      #
-      user_answer.concat(@hint[-(@answer.size - user_answer.size)..-1])
+    def correct?(user_answer)
+      @answer == user_answer
+    end
+
+    # 問題の答えとユーザーの回答を比べて、正解している部分だけを表示した文字列を返す
+    #
+    # ex.
+    #   question.answer # => 'abcdef'
+    #   question.show_partial_answer('axcxxf') # => 'a_c__f'
+    #
+    def show_partial_answer(user_answer)
+      if @answer.size > user_answer.size
+        # ユーザーの回答の文字数が少ないときは、不足分を隠れた答えで埋める
+        user_answer.concat(@hidden_answer[-(@answer.size - user_answer.size)..-1])
+      elsif @answer.size < user_answer.size
+        # ユーザーの回答の文字数が多いときは、超過分の文字を削る
+        user_answer = user_answer[0...@answer.size]
+      end
 
       [@answer.chars, user_answer.chars].transpose
-        .map { |chars| chars.first == chars.last ? chars.first : '_' }
-        .join
+        .map
+        .with_index { |(answer_char, user_answer_char), idx|
+          answer_char.downcase == user_answer_char.downcase ? answer_char : @hidden_answer[idx]
+        }.join
     end
   end
 end

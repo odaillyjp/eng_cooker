@@ -60,9 +60,9 @@ module EngCooker
 
     # public methods
 
-    describe '#filter_en_text' do
+    describe '#hide_en_text' do
       it '英文の中のアルファベットを"_"に変換した文字列を返すこと' do
-        expect(sentence.filter_en_text).to eq '___ _____ _________ __ ___ ________.'
+        expect(sentence.hide_en_text).to eq '___ _____ _________ __ ___ ________.'
       end
     end
 

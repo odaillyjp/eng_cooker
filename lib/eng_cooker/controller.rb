@@ -20,15 +20,18 @@ module EngCooker
 
     def question
       maked_question = Question.make
-      puts maked_question.examination
-      puts "> #{maked_question.hint}"
+      hidden_answer = maked_question.hidden_answer
 
       loop do
-        user_answer = ask('>')
-        hint = maked_question.check_answer(user_answer)
-
         puts maked_question.examination
-        puts "> #{hint}"
+        puts "> #{hidden_answer}"
+        user_answer = ask('>')
+        puts ''
+
+        # 正解したら、ループを終える
+        break if maked_question.correct?(user_answer)
+
+        hidden_answer = maked_question.show_partial_answer(user_answer)
       end
     end
   end

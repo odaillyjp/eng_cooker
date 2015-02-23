@@ -31,8 +31,8 @@ module EngCooker
       EngCooker.configuration.database.set(self)
     end
 
-    def filter_en_text(filted_symbol = '_')
-      @en_text.gsub(/[^#{DELIMITER}]/, filted_symbol)
+    def hide_en_text(hidden_symbol = '_')
+      @en_text.gsub(/[^#{DELIMITER}]/, hidden_symbol)
     end
 
     def ==(other)
