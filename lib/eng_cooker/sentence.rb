@@ -32,7 +32,7 @@ module EngCooker
     end
 
     def hide_en_text(hidden_symbol = '_')
-      @en_text.gsub(/[^#{DELIMITER}]/, hidden_symbol)
+      @hidden_en_text ||= en_text.gsub(/[^#{DELIMITER}]/, hidden_symbol)
     end
 
     def ==(other)
