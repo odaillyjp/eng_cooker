@@ -1,0 +1,13 @@
+#!/usr/bin/env ruby
+
+require 'bundler'
+Bundler.require
+
+lib = File.expand_path('../lib', __dir__)
+$LOAD_PATH.unshift(lib) if File.directory?(lib) && !$LOAD_PATH.include?(lib)
+require 'eng_cooker'
+
+# 設定ファイルを読み込む
+require_relative '../config/application'
+
+EngCooker::Controller.new.run
