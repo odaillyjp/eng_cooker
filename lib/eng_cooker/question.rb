@@ -20,6 +20,8 @@ module EngCooker
       #   ユーザーの回答 (user_answer) = 'axcxxf'
       #   返り値                       = 'a_c__f'
       #
+      user_answer.concat(@hint[-(@answer.size - user_answer.size)..-1])
+
       [@answer.chars, user_answer.chars].transpose
         .map { |chars| chars.first == chars.last ? chars.first : '_' }
         .join
