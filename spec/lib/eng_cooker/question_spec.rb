@@ -76,9 +76,9 @@ module EngCooker
         end
 
         context '答えよりも文字数が多い単語を含んだ文字列を渡したとき' do
-          it '超過分分を削った答えを返すこと' do
+          it '文字数が多い単語は全て隠し文字に変えた答えを返すこと' do
             user_answer = 'Loremx ipsumxxx dxxxxolor sit amettt.'
-            expect_answer = 'Lorem ipsum d____ sit amet.'
+            expect_answer = '_____ _____ _____ sit ____.'
             expect(question.show_partial_answer(user_answer)).to eq expect_answer
           end
         end

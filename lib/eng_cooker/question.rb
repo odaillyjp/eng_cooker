@@ -32,7 +32,7 @@ module EngCooker
       if @sentence.words.size > user_sentence.words.size
         # ユーザーの回答の単語数が少ない場合、不足分をダミーの単語で埋める
         deficient_word_count = @sentence.words.size - user_sentence.words.size
-        lengthen_answer = [user_answer, ' ___' * deficient_word_count].join
+        lengthen_answer = [user_answer, ' _' * deficient_word_count].join
         user_sentence = Sentence.new(en_text: lengthen_answer)
       else
         # ユーザーの回答の単語数が多い場合、超過分の単語を削る
@@ -44,6 +44,8 @@ module EngCooker
         .map do |(answer_word, user_answer_word)|
           if answer_word.downcase == user_answer_word.downcase
             answer_word
+          elsif answer_word.size < user_answer_word.size
+            '_' * answer_word.size
           else
             answer_word.chars.map.with_index { |answer_char, idx|
               answer_char == user_answer_word[idx] ? answer_char : '_'
