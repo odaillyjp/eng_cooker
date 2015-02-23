@@ -27,19 +27,31 @@ module EngCooker
     #   question.show_partial_answer('axcxxf') # => 'a_c__f'
     #
     def show_partial_answer(user_answer)
-      if answer.size > user_answer.size
-        # ユーザーの回答の文字数が少ないときは、不足分を隠れた答えで埋める
-        user_answer.concat(hidden_answer[-(answer.size - user_answer.size)..-1])
-      elsif answer.size < user_answer.size
-        # ユーザーの回答の文字数が多いときは、超過分の文字を削る
-        user_answer = user_answer[0...answer.size]
+      user_sentence = Sentence.new(en_text: user_answer)
+
+      if @sentence.words.size > user_sentence.words.size
+        # ユーザーの回答の単語数が少ない場合、不足分をダミーの単語で埋める
+        deficient_word_count = @sentence.words.size - user_sentence.words.size
+        lengthen_answer = [user_answer, ' ___' * deficient_word_count].join
+        user_sentence = Sentence.new(en_text: lengthen_answer)
+      else
+        # ユーザーの回答の単語数が多い場合、超過分の単語を削る
+        shorten_answer = user_sentence.words[0...@sentence.words.size].join(' ')
+        user_sentence = Sentence.new(en_text: shorten_answer)
       end
 
-      [answer.chars, user_answer.chars].transpose
-        .map
-        .with_index { |(answer_char, user_answer_char), idx|
-          answer_char.downcase == user_answer_char.downcase ? answer_char : hidden_answer[idx]
-        }.join
+      result_words = [@sentence.words, user_sentence.words].transpose
+        .map do |(answer_word, user_answer_word)|
+          if answer_word.downcase == user_answer_word.downcase
+            answer_word
+          else
+            answer_word.chars.map.with_index { |answer_char, idx|
+              answer_char == user_answer_word[idx] ? answer_char : '_'
+            }.join
+          end
+        end
+
+      hidden_answer.gsub(/_+/, '%s') % result_words
     end
   end
 end

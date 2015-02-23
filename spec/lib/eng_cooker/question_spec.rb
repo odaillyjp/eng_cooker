@@ -43,26 +43,18 @@ module EngCooker
           end
         end
 
-        context '答えよりも文字数が少ない文字列を渡したとき' do
-          it '不足分を隠れた答えで埋めた答えを返すこと' do
+        context '答えよりも単語数が少ない文字列を渡したとき' do
+          it '不足分を隠し文字で埋めた答えを返すこと' do
             user_answer = 'Loxxm ixsxx'
             expect_answer = 'Lo__m i_s__ _____ ___ ____.'
             expect(question.show_partial_answer(user_answer)).to eq expect_answer
           end
         end
 
-        context '答えよりも文字数が多い文字列を渡したとき' do
-          it '超過分を削った答えを返すこと' do
+        context '答えよりも単語数が多い文字列を渡したとき' do
+          it '超過分の単語を削った答えを返すこと' do
             user_answer = 'Lorem !?#$% dolor sit amet. foo bar buzz.'
             expect_answer = 'Lorem _____ dolor sit amet.'
-            expect(question.show_partial_answer(user_answer)).to eq expect_answer
-          end
-        end
-
-        context '区切り文字を間違えている文字列を渡したとき' do
-          it '区切り文字を間違えている部分は"_"に変換しないこと' do
-            user_answer = 'xoremxipsumxdolorxsitxametx'
-            expect_answer = '_orem ipsum dolor sit amet.'
             expect(question.show_partial_answer(user_answer)).to eq expect_answer
           end
         end
@@ -70,6 +62,22 @@ module EngCooker
         context '大文字と小文字を間違えている文字列を渡したとき' do
           it '大文字と小文字の区別はしないこと' do
             user_answer = 'lorem ipsum dxxxx sit amet.'
+            expect_answer = 'Lorem ipsum d____ sit amet.'
+            expect(question.show_partial_answer(user_answer)).to eq expect_answer
+          end
+        end
+
+        context '答えよりも文字数が少ない単語を含んだ文字列を渡したとき' do
+          it '不足分を隠し文字で埋めた答えを返すこと' do
+            user_answer = 'Lor i dol sit ame.'
+            expect_answer = 'Lor__ i____ dol__ sit ame_.'
+            expect(question.show_partial_answer(user_answer)).to eq expect_answer
+          end
+        end
+
+        context '答えよりも文字数が多い単語を含んだ文字列を渡したとき' do
+          it '超過分分を削った答えを返すこと' do
+            user_answer = 'Loremx ipsumxxx dxxxxolor sit amettt.'
             expect_answer = 'Lorem ipsum d____ sit amet.'
             expect(question.show_partial_answer(user_answer)).to eq expect_answer
           end
