@@ -17,7 +17,7 @@ module EngCooker
     end
 
     def correct?(user_answer)
-      answer == user_answer
+      answer.downcase == user_answer.downcase
     end
 
     # 問題の答えとユーザーの回答を比べて、正解している部分だけを表示した文字列を返す

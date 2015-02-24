@@ -34,6 +34,22 @@ module EngCooker
 
       # public methods
 
+      describe '#correct?' do
+        context '答えと完全一致している文字列を渡したとき' do
+          it { expect(question.correct?(sentence.en_text)).to be_truthy }
+        end
+
+        context '答えと完全一致していない文字列を渡したとき' do
+          it { expect(question.correct?('foo')).to be_falsy }
+        end
+
+        context '答えの文字を全て小文字に変換した文字列を渡したとき' do
+          it '大文字と小文字を区別せずに判定すること' do
+            expect(question.correct?(sentence.en_text.downcase)).to be_truthy
+          end
+        end
+      end
+
       describe '#show_partial_answer' do
         context '答えと一致している部分がある文字列を渡したとき' do
           it '答えと一致していた部分だけを表示した答えを返すこと' do
