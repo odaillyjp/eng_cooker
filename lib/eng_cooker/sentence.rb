@@ -1,6 +1,7 @@
 module EngCooker
   class Sentence
     attr_reader :en_text, :ja_text, :words
+    attr_accessor :id
 
     DELIMITER = '\s\r\n,.:;"()'
 
@@ -12,7 +13,7 @@ module EngCooker
 
     def self.all
       sentences = EngCooker.configuration.database.find_all
-      sentences.map { |sentence| Sentence.new(sentence.slice(:en_text, :ja_text)) }
+      sentences.map { |sentence| Sentence.new(sentence.slice(:id, :en_text, :ja_text)) }
     end
 
     def self.sample
@@ -21,7 +22,8 @@ module EngCooker
       Sentence.new(sentence.slice(:en_text, :ja_text))
     end
 
-    def initialize(en_text: '', ja_text: '')
+    def initialize(id: nil, en_text: '', ja_text: '')
+      @id = id
       @en_text = en_text
       @ja_text = ja_text
       @words = split_word(en_text)

@@ -34,5 +34,14 @@ module EngCooker
         hidden_answer = maked_question.show_partial_answer(user_answer)
       end
     end
+
+    # list command
+    desc 'list', 'Show sentences in the database'
+
+    def list
+      Sentence.all.each do |sentence|
+        puts "#{sentence.id}, #{sentence.ja_text}"
+      end
+    end
   end
 end

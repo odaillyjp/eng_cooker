@@ -2,13 +2,20 @@ module EngCooker
   module Database
     require 'json'
 
+    # 注意: このクラスは複数のプロセスやスレッドから同時に使うことを想定していない
     class LocalFile
       def initialize(storage_path: 'db/sentences.json')
         @storage_path = [APP_ROOT, storage_path].join('/')
         @sentences = load_storage_file
+        @last_id = @sentences.max_by { |sentence| sentence[:id] } || 0
       end
 
       def set(data)
+        if data.id.nil?
+          @last_id += 1
+          data.id = @last_id
+        end
+
         @sentences.push(data.to_h)
         File.open(@storage_path, 'w') { |file| file.write(@sentences.to_json) }
       end
@@ -44,7 +51,7 @@ module EngCooker
 
   Sentence.class_eval do
     def to_h
-      { en_text: @en_text, ja_text: @ja_text, created_at: Time.now }
+      { id: @id, en_text: @en_text, ja_text: @ja_text, created_at: Time.now }
     end
   end
 end
