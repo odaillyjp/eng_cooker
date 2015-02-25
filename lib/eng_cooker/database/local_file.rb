@@ -7,7 +7,12 @@ module EngCooker
       def initialize(storage_path: 'db/sentences.json')
         @storage_path = [APP_ROOT, storage_path].join('/')
         @sentences = load_storage_file
-        @last_id = @sentences.max_by { |sentence| sentence[:id] } || 0
+        @last_id = if @sentences.present?
+                     last_sentence = @sentences.max_by { |sentence| sentence[:id] }
+                     last_sentence[:id]
+                   else
+                     0
+                   end
       end
 
       def set(data)
