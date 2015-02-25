@@ -70,9 +70,9 @@ module EngCooker
         middle_id = @sentences[middle_index][:id]
 
         case middle_id <=> sentence_id
-        when -1 then find_by_bsearch(sentence_id, from: from, to: (middle_index - 1))
+        when 1 then find_by_bsearch(sentence_id, from: from, to: (middle_index - 1))
         when 0 then @sentences[middle_index]
-        when 1 then find_by_bsearch(sentence_id, from: (middle_index + 1), to: to)
+        when -1 then find_by_bsearch(sentence_id, from: (middle_index + 1), to: to)
         end
       end
     end
