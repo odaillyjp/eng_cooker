@@ -6,8 +6,9 @@ module EngCooker::Database
     subject { database }
 
     it { is_expected.to be_respond_to(:set) }
-    it { is_expected.to be_respond_to(:sample) }
     it { is_expected.to be_respond_to(:find_all) }
+    it { is_expected.to be_respond_to(:find) }
+    it { is_expected.to be_respond_to(:sample) }
     it { is_expected.to be_respond_to(:truncate!) }
   end
 end

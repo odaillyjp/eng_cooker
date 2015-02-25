@@ -21,15 +21,28 @@ module EngCooker
 
       describe '.all' do
         it 'その英文だけを持つ配列を返すこと' do
-          sampling_sentences = Sentence.all
-          expect(sampling_sentences).to eq [@created_sentence]
+          expect(Sentence.all).to eq [@created_sentence]
+        end
+      end
+
+      describe '.find' do
+        context '存在しないid番号を渡したとき' do
+          it 'nilを返すこと' do
+            expect(Sentence.find(0)).to be_nil
+            expect(Sentence.find(2)).to be_nil
+          end
+        end
+
+        context '1を渡したとき' do
+          it 'idに1を持つ英文を返すこと' do
+            expect(Sentence.find(1).id).to eq 1
+          end
         end
       end
 
       describe '.sample' do
         it 'その英文を返すこと' do
-          sampling_sentence = Sentence.sample
-          expect(sampling_sentence).to eq @created_sentence
+          expect(Sentence.sample).to eq @created_sentence
         end
       end
     end
@@ -48,6 +61,21 @@ module EngCooker
       describe '.all' do
         it '保存された2つの英文だけを持つ配列を返すこと' do
           expect(Sentence.all).to eq @created_sentences
+        end
+      end
+
+      describe '.find' do
+        context '存在しないid番号を渡したとき' do
+          it 'nilを返すこと' do
+            expect(Sentence.find(0)).to be_nil
+            expect(Sentence.find(3)).to be_nil
+          end
+        end
+
+        context '1を渡したとき' do
+          it 'idに1を持つ英文を返すこと' do
+            expect(Sentence.find(1).id).to eq 1
+          end
         end
       end
 

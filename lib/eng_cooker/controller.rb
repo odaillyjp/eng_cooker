@@ -16,10 +16,12 @@ module EngCooker
     end
 
     # question command
+    option :id, desc: 'Question id.', type: :numeric
     desc 'question', 'Set a question for a sentence in the database.'
 
     def question
-      maked_question = Question.make
+      maked_question = Question.make(options[:id])
+      fail '問題文が見つかりませんでした。' if maked_question.nil?
       hidden_answer = maked_question.hidden_answer
 
       loop do

@@ -16,6 +16,12 @@ module EngCooker
       sentences.map { |sentence| Sentence.new(sentence.slice(:id, :en_text, :ja_text)) }
     end
 
+    def self.find(sentence_id)
+      sentence = EngCooker.configuration.database.find(sentence_id.to_i)
+      return nil if sentence.nil?
+      Sentence.new(sentence.slice(:id, :en_text, :ja_text))
+    end
+
     def self.sample
       sentence = EngCooker.configuration.database.sample
       return nil if sentence.nil?

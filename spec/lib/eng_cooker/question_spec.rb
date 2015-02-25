@@ -4,7 +4,7 @@ module EngCooker
   describe Question do
     context '英文が1つ保存されているとき' do
       before :all do
-        @sentence = Sentence.create('Lorem ipsum.', 'テスト。')
+        Sentence.create('Lorem ipsum.', 'テスト。')
       end
 
       after :all do
@@ -19,6 +19,46 @@ module EngCooker
           expect(maked_question.examination).to eq 'テスト。'
           expect(maked_question.hidden_answer).to eq '_____ _____.'
           expect(maked_question.answer).to eq 'Lorem ipsum.'
+        end
+      end
+    end
+
+    context '英文が2つ保存されているとき' do
+      before :all do
+        Sentence.create('Lorem ipsum.', 'テスト。')
+        Sentence.create('Foo bar buzz.', 'ダミーテキスト。')
+      end
+
+      after :all do
+        EngCooker.configuration.database.truncate!
+      end
+
+      # class methods
+
+      describe '.make' do
+        context '"1"を渡したとき' do
+          it 'idに1を持つ英文を使った問題を返すこと' do
+            maked_question = Question.make('1')
+            expect(maked_question.examination).to eq 'テスト。'
+            expect(maked_question.hidden_answer).to eq '_____ _____.'
+            expect(maked_question.answer).to eq 'Lorem ipsum.'
+          end
+        end
+
+        context '"2"を渡したとき' do
+          it 'idに2を持つ英文を使った問題を返すこと' do
+            maked_question = Question.make('2')
+            expect(maked_question.examination).to eq 'ダミーテキスト。'
+            expect(maked_question.hidden_answer).to eq '___ ___ ____.'
+            expect(maked_question.answer).to eq 'Foo bar buzz.'
+          end
+        end
+
+        context '存在しないid番号を渡したとき' do
+          it 'nilを返すこと' do
+            expect(Question.make('0')).to be_nil
+            expect(Question.make('3')).to be_nil
+          end
         end
       end
     end

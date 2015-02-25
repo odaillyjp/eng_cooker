@@ -8,8 +8,15 @@ module EngCooker
     def_delegator :@sentence, :hide_en_text, :hidden_answer
     def_delegator :@sentence, :en_text,      :answer
 
-    def self.make
-      Question.new(Sentence.sample)
+    def self.make(sentence_id = nil)
+      sentence = if sentence_id.present?
+                   Sentence.find(sentence_id)
+                 else
+                   Sentence.sample
+                 end
+
+      return nil if sentence.nil?
+      Question.new(sentence)
     end
 
     def initialize(sentence)

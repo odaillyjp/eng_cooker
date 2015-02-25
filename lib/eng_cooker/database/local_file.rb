@@ -20,17 +20,29 @@ module EngCooker
         File.open(@storage_path, 'w') { |file| file.write(@sentences.to_json) }
       end
 
-      def sample
-        @sentences.sample
-      end
-
       def find_all
         @sentences
+      end
+
+      def find(sentence_id)
+        find_by_bsearch(sentence_id)
+
+        # 注意: IDが昇順で並んでいるのでバイナリサーチが可能だが,
+        #　　　 昇順ではなくなった場合はバイナリサーチができないので,
+        #　　　 このメソッドは正しく動かなくなる.
+        #       その場合は、処理を以下のように修正すること.
+        #
+        # @sentences.find { |sentence| sentence[:id] == sentence_id }
+      end
+
+      def sample
+        @sentences.sample
       end
 
       def truncate!
         @sentences = []
         File.open(@storage_path, 'w') { |file| file.write(@sentences.to_json) }
+        @last_id = 0
       end
 
       private
@@ -43,6 +55,20 @@ module EngCooker
         end
       rescue JSON::ParserError
         raise StorageLoadError, 'データベースファイルの解析に失敗しました。'
+      end
+
+      def find_by_bsearch(sentence_id, from: 0, to: (@sentences.size - 1))
+        return nil if from > to
+
+        # バイナリサーチで該当のIDを持つ文を見つける
+        middle_index = (from + to) / 2
+        middle_id = @sentences[middle_index][:id]
+
+        case middle_id <=> sentence_id
+        when -1 then find_by_bsearch(sentence_id, from: from, to: (middle_index - 1))
+        when 0 then @sentences[middle_index]
+        when 1 then find_by_bsearch(sentence_id, from: (middle_index + 1), to: to)
+        end
       end
     end
 
