@@ -3,7 +3,7 @@ module EngCooker
     attr_reader :en_text, :ja_text, :words
     attr_accessor :id
 
-    DELIMITER = '\s\r\n,.:;"()'
+    DELIMITER = '\s\r\n,.:;"()!?'
 
     def self.create(en_text, ja_text)
       sentence = Sentence.new(en_text: en_text, ja_text: ja_text)
